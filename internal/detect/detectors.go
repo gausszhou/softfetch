@@ -18,26 +18,26 @@ func NewGoDetector() *GoDetector {
 }
 
 func (d *GoDetector) Detect() Tool {
-	result := command.Execute("go", "version")
 	tool := Tool{
 		Name:     d.name,
 		Category: string(d.Category()),
 		Symbol:   "⬢",
 	}
 
-	if !result.Exists {
+	path, err := command.LookPath("go")
+	if err != nil {
 		tool.Detected = false
 		tool.Version = "Not installed"
 		return tool
 	}
 
+	result := command.Execute("go", "version")
 	if result.Error != nil {
 		tool.Detected = false
 		tool.Version = parseVersion(result.Output)
 		return tool
 	}
 
-	path, _ := command.LookPath("go")
 	tool.Path = path
 	tool.Detected = true
 	tool.Version = parseVersion(result.Output)
@@ -58,26 +58,26 @@ func NewNodeDetector() *NodeDetector {
 }
 
 func (d *NodeDetector) Detect() Tool {
-	result := command.Execute("node", "--version")
 	tool := Tool{
 		Name:     d.name,
 		Category: string(d.Category()),
 		Symbol:   "⬢",
 	}
 
-	if !result.Exists {
+	path, err := command.LookPath("node")
+	if err != nil {
 		tool.Detected = false
 		tool.Version = "Not installed"
 		return tool
 	}
 
+	result := command.Execute("node", "--version")
 	if result.Error != nil {
 		tool.Detected = false
 		tool.Version = parseVersion(result.Output)
 		return tool
 	}
 
-	path, _ := command.LookPath("node")
 	tool.Path = path
 	tool.Detected = true
 	tool.Version = parseVersion(result.Output)
@@ -135,19 +135,20 @@ func NewJavaDetector() *JavaDetector {
 }
 
 func (d *JavaDetector) Detect() Tool {
-	result := command.Execute("java", "-version")
 	tool := Tool{
 		Name:     d.name,
 		Category: string(d.Category()),
 		Symbol:   "☕",
 	}
 
-	if !result.Exists {
+	path, err := command.LookPath("java")
+	if err != nil {
 		tool.Detected = false
 		tool.Version = "Not installed"
 		return tool
 	}
 
+	result := command.Execute("java", "-version")
 	if result.Error != nil {
 		tool.Detected = false
 		if result.Output == "" {
@@ -158,7 +159,166 @@ func (d *JavaDetector) Detect() Tool {
 		return tool
 	}
 
-	path, _ := command.LookPath("java")
+	tool.Path = path
+	tool.Detected = true
+	tool.Version = parseVersion(result.Output)
+	return tool
+}
+
+type CDetector struct {
+	baseDetector
+}
+
+func NewCDetector() *CDetector {
+	return &CDetector{
+		baseDetector: baseDetector{
+			name:     "C",
+			category: CategoryLanguage,
+		},
+	}
+}
+
+func (d *CDetector) Detect() Tool {
+	tool := Tool{
+		Name:     d.name,
+		Category: string(d.Category()),
+		Symbol:   "🔧",
+	}
+
+	commands := []string{"gcc", "clang", "cc"}
+	for _, cmd := range commands {
+		path, err := command.LookPath(cmd)
+		if err != nil {
+			continue
+		}
+		result := command.Execute(cmd, "--version")
+		if result.Error == nil {
+			tool.Detected = true
+			tool.Version = parseVersion(result.Output)
+			tool.Path = path
+			return tool
+		}
+	}
+
+	tool.Detected = false
+	tool.Version = "Not installed"
+	return tool
+}
+
+type CppDetector struct {
+	baseDetector
+}
+
+func NewCppDetector() *CppDetector {
+	return &CppDetector{
+		baseDetector: baseDetector{
+			name:     "C++",
+			category: CategoryLanguage,
+		},
+	}
+}
+
+func (d *CppDetector) Detect() Tool {
+	tool := Tool{
+		Name:     d.name,
+		Category: string(d.Category()),
+		Symbol:   "🔧",
+	}
+
+	commands := []string{"g++", "clang++", "c++"}
+	for _, cmd := range commands {
+		path, err := command.LookPath(cmd)
+		if err != nil {
+			continue
+		}
+		result := command.Execute(cmd, "--version")
+		if result.Error == nil {
+			tool.Detected = true
+			tool.Version = parseVersion(result.Output)
+			tool.Path = path
+			return tool
+		}
+	}
+
+	tool.Detected = false
+	tool.Version = "Not installed"
+	return tool
+}
+
+type RustDetector struct {
+	baseDetector
+}
+
+func NewRustDetector() *RustDetector {
+	return &RustDetector{
+		baseDetector: baseDetector{
+			name:     "Rust",
+			category: CategoryLanguage,
+		},
+	}
+}
+
+func (d *RustDetector) Detect() Tool {
+	tool := Tool{
+		Name:     d.name,
+		Category: string(d.Category()),
+		Symbol:   "🦀",
+	}
+
+	path, err := command.LookPath("rustc")
+	if err != nil {
+		tool.Detected = false
+		tool.Version = "Not installed"
+		return tool
+	}
+
+	result := command.Execute("rustc", "--version")
+	if result.Error == nil {
+		tool.Detected = true
+		tool.Version = parseVersion(result.Output)
+		tool.Path = path
+		return tool
+	}
+
+	tool.Detected = false
+	tool.Version = "Not installed"
+	return tool
+}
+
+type PHPDetector struct {
+	baseDetector
+}
+
+func NewPHPDetector() *PHPDetector {
+	return &PHPDetector{
+		baseDetector: baseDetector{
+			name:     "PHP",
+			category: CategoryLanguage,
+		},
+	}
+}
+
+func (d *PHPDetector) Detect() Tool {
+	tool := Tool{
+		Name:     d.name,
+		Category: string(d.Category()),
+		Symbol:   "🐘",
+	}
+
+	path, err := command.LookPath("php")
+	if err != nil {
+		tool.Detected = false
+		tool.Version = "Not installed"
+		return tool
+	}
+
+	result := command.Execute("php", "--version")
+	if result.Error != nil {
+		tool.Detected = false
+		tool.Version = parseVersion(result.Output)
+		return tool
+	}
+
 	tool.Path = path
 	tool.Detected = true
 	tool.Version = parseVersion(result.Output)
@@ -171,5 +331,9 @@ func GetCoreDetectors() []Detector {
 		NewNodeDetector(),
 		NewPythonDetector(),
 		NewJavaDetector(),
+		NewCDetector(),
+		NewCppDetector(),
+		NewRustDetector(),
+		NewPHPDetector(),
 	}
 }
