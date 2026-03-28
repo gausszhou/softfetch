@@ -27,7 +27,7 @@ A Go project for fetching software information.
 
 ```bash
 # Clone the repository
-git clone https://github.com/user/softfetch.git
+git clone https://github.com/gausszhou/softfetch.git
 cd softfetch
 
 # Install dependencies

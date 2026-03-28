@@ -47,7 +47,7 @@ import (
     
     "github.com/spf13/cobra"
     
-    "github.com/user/softfetch/pkg/version"
+    "github.com/gausszhou/softfetch/pkg/version"
 )
 ```
 
