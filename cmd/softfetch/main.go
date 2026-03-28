@@ -3,6 +3,9 @@ package main
 import (
 	"fmt"
 	"os"
+
+	"github.com/user/softfetch/internal/detect"
+	"github.com/user/softfetch/internal/display"
 )
 
 var (
@@ -12,8 +15,14 @@ var (
 )
 
 func main() {
-	fmt.Printf("Welcome to SoftFetch! (version: %s, commit: %s, build date: %s)\n", version, commit, buildDate)
+	detectors := detect.GetCoreDetectors()
+	result := detect.Detect(detectors...)
+
+	display.PrintResult(result)
+
 	if len(os.Args) > 1 {
-		fmt.Printf("Arguments: %v\n", os.Args[1:])
+		if os.Args[1] == "--version" || os.Args[1] == "-v" {
+			fmt.Printf("SoftFetch version: %s\n", version)
+		}
 	}
 }
