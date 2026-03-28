@@ -80,6 +80,24 @@ func parseVersion(output string) string {
 		firstLine := lines[0]
 		firstLine = strings.ReplaceAll(firstLine, "\r", "")
 
+		re := regexp.MustCompile(`go\s*(\d+\.\d+[\w.-]*)`)
+		matches := re.FindStringSubmatch(firstLine)
+		if len(matches) > 1 {
+			return matches[1]
+		}
+
+		re = regexp.MustCompile(`Python\s+(\d+\.\d+\.\d+)`)
+		matches = re.FindStringSubmatch(firstLine)
+		if len(matches) > 1 {
+			return matches[1]
+		}
+
+		re = regexp.MustCompile(`openjdk\s+version\s+"?(\d+[^"]+)"?`)
+		matches = re.FindStringSubmatch(firstLine)
+		if len(matches) > 1 {
+			return matches[1]
+		}
+
 		if idx := strings.Index(firstLine, "version"); idx != -1 {
 			rest := firstLine[idx+len("version"):]
 			rest = strings.TrimSpace(rest)
@@ -97,25 +115,7 @@ func parseVersion(output string) string {
 			}
 		}
 
-		re := regexp.MustCompile(`(\d+\.\d+\.\d+[\w.-]*)`)
-		matches := re.FindStringSubmatch(firstLine)
-		if len(matches) > 1 {
-			return matches[1]
-		}
-
-		re = regexp.MustCompile(`Python\s+(\d+\.\d+\.\d+)`)
-		matches = re.FindStringSubmatch(firstLine)
-		if len(matches) > 1 {
-			return matches[1]
-		}
-
-		re = regexp.MustCompile(`go(\d+\.\d+[\w.-]*)`)
-		matches = re.FindStringSubmatch(firstLine)
-		if len(matches) > 1 {
-			return matches[1]
-		}
-
-		re = regexp.MustCompile(`openjdk\s+version\s+"?(\d+[^"]+)"?`)
+		re = regexp.MustCompile(`(\d+\.\d+\.\d+[\w.-]*)`)
 		matches = re.FindStringSubmatch(firstLine)
 		if len(matches) > 1 {
 			return matches[1]

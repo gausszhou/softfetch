@@ -46,7 +46,7 @@ func PrintResult(result detect.DetectionResult) {
 
 	fmt.Printf(ColorGray+"  %-"+fmt.Sprintf("%d", nameWidth)+"s  %-"+fmt.Sprintf("%d", verWidth)+"s  %s"+ColorReset+"\n",
 		"Environment", "Version", "Path")
-	fmt.Println(strings.Repeat("─", nameWidth+verWidth+28))
+	fmt.Println(strings.Repeat("─", nameWidth+verWidth+40))
 
 	for _, tool := range result.Tools {
 		printTool(tool, nameWidth, verWidth)
@@ -58,11 +58,6 @@ func PrintResult(result detect.DetectionResult) {
 }
 
 func printTool(tool detect.Tool, nameWidth, verWidth int) {
-	symbol := tool.Symbol
-	if symbol == "" {
-		symbol = "●"
-	}
-
 	name := tool.Name
 	name = name + strings.Repeat(" ", nameWidth-len(name))
 
@@ -76,23 +71,15 @@ func printTool(tool detect.Tool, nameWidth, verWidth int) {
 		versionColor = ColorRed
 	}
 
-	fmt.Printf("  %s %s%-14s%s  %s%-20s%s  %s\n",
-		symbol,
+	fmt.Printf("  %s%-14s%s  %s%-20s%s  %s\n",
 		ColorYellow,
 		name,
 		ColorReset,
 		versionColor,
 		version,
 		ColorReset,
-		ColorGray+truncatePath(path, 40)+ColorReset,
+		ColorGray+path+ColorReset,
 	)
-}
-
-func truncatePath(path string, maxLen int) string {
-	if len(path) <= maxLen {
-		return path
-	}
-	return "..." + path[len(path)-maxLen+3:]
 }
 
 func PrintSimple(result detect.DetectionResult) {
