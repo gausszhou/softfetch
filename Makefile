@@ -13,6 +13,13 @@ LDFLAGS := -ldflags "-X main.version=$(VERSION) -X main.commit=$(COMMIT) -X 'mai
 .PHONY: all
 all: build
 
+# Detect OS
+ifeq ($(OS),Windows_NT)
+    DETECTED_OS := Windows
+else
+    DETECTED_OS := $(shell uname -s)
+endif
+
 # Build the application
 .PHONY: build
 build:
@@ -66,6 +73,22 @@ deps:
 	@go mod download
 	@go mod tidy
 
+# Install the application
+.PHONY: install
+install: build
+	@echo "Installing $(APP_NAME)..."
+	@mkdir -p $$HOME/bin
+	@cp -f $(BUILD_DIR)/$(APP_NAME) $$HOME/bin/
+	@echo "Installed to $$HOME/bin/$(APP_NAME)"
+	@echo "Add $$HOME/bin to your PATH to use $(APP_NAME) from anywhere"
+
+# Uninstall the application
+.PHONY: uninstall
+uninstall:
+	@echo "Uninstalling $(APP_NAME)..."
+	@rm -f $$HOME/bin/$(APP_NAME)
+	@echo "Removed from $$HOME/bin/"
+
 # Run the application
 .PHONY: run
 run: build
@@ -89,6 +112,8 @@ help:
 	@echo "  fmt            - Format the code"
 	@echo "  clean          - Clean build artifacts"
 	@echo "  deps           - Install dependencies"
+	@echo "  install        - Install the application"
+	@echo "  uninstall      - Uninstall the application"
 	@echo "  run            - Run the application"
 	@echo "  docker-build   - Build Docker image"
 	@echo "  help           - Show this help message"
