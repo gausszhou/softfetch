@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/user/softfetch/internal/detect"
-	"github.com/user/softfetch/internal/display"
+	"github.com/gausszhou/softfetch/internal/detect"
+	"github.com/gausszhou/softfetch/internal/display"
 )
 
 var (

@@ -1,7 +1,7 @@
 package detect
 
 import (
-	"github.com/user/softfetch/internal/command"
+	"github.com/gausszhou/softfetch/internal/command"
 )
 
 type GoDetector struct {

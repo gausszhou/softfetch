@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/user/softfetch/internal/detect"
+	"github.com/gausszhou/softfetch/internal/detect"
 )
 
 var (
