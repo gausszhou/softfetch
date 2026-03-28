@@ -1,4 +1,4 @@
-.PHONY: build test clean install build-all lint fmt vet
+.PHONY: build test clean install uninstall build-all lint fmt vet
 
 BINARY_NAME=softfetch
 DIST_DIR=dist
@@ -14,7 +14,14 @@ clean:
 	rm -f coverage.out
 
 install:
+	@echo "Installing $(BINARY_NAME)..."
 	go install ./cmd/softfetch
+	@echo "$(BINARY_NAME) installed successfully to $$(go env GOPATH)/bin"
+
+uninstall:
+	@echo "Uninstalling $(BINARY_NAME)..."
+	rm -f $$(go env GOPATH)/bin/$(BINARY_NAME).exe
+	@echo "$(BINARY_NAME) uninstalled successfully"
 
 build-all: build-linux build-darwin build-windows
 
