@@ -110,8 +110,10 @@ func (d *PythonDetector) Detect() Tool {
 		if result.Exists && result.Error == nil {
 			tool.Detected = true
 			tool.Version = parseVersion(result.Output)
-			path, _ := command.LookPath(cmd)
-			tool.Path = path
+			path, err := command.LookPath(cmd)
+			if err == nil {
+				tool.Path = path
+			}
 			return tool
 		}
 	}

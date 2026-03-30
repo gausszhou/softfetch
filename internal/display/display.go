@@ -59,7 +59,7 @@ func PrintResult(result detect.DetectionResult) {
 
 func printTool(tool detect.Tool, nameWidth, verWidth int) {
 	name := tool.Name
-	name = name + strings.Repeat(" ", nameWidth-len(name))
+	name += strings.Repeat(" ", nameWidth-len(name))
 
 	version := tool.Version
 	path := tool.Path
