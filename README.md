@@ -1,65 +1,35 @@
 # SoftFetch
 
-A Go project for fetching software information.
+A command-line tool that detects installed development tools and languages on your system.
 
-## Project Structure
+## Features
 
-```
-.
-├── cmd/softfetch/      # Application entry points
-├── pkg/               # Library code that's safe to export
-├── internal/          # Private application and library code
-├── configs/           # Configuration files
-├── scripts/           # Scripts for building, CI, etc.
-├── deployments/       # Deployment configurations
-├── docs/              # Documentation
-├── test/              # Additional test files
-└── vendor/            # Vendor dependencies (if used)
-```
+- Detects: Go, Node.js, Python, Java, C, C++, Rust, PHP
+- Displays OS and architecture information
+- Simple and fast
 
-## Getting Started
-
-### Prerequisites
-
-- Go 1.21 or later
-
-### Installation
+## Installation
 
 ```bash
-# Clone the repository
+# Install latest version
+go install github.com/gausszhou/softfetch@latest
+
+# Or build from source
 git clone https://github.com/gausszhou/softfetch.git
 cd softfetch
-
-# Install dependencies
-go mod download
-
-# Build the application
-go build -o bin/softfetch ./cmd/softfetch
-
-# Run the application
-./bin/softfetch
+go build -o bin/softfetch .
 ```
 
-## Development
-
-### Build
+## Usage
 
 ```bash
-make build
-```
+# Run the tool
+softfetch
 
-### Test
-
-```bash
-make test
-```
-
-### Lint
-
-```bash
-make lint
+# Check version
+softfetch --version
 ```
 
 ## License
 
-MIT License
+MIT
