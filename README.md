@@ -17,7 +17,7 @@ go install github.com/gausszhou/softfetch@latest
 # Or build from source
 git clone https://github.com/gausszhou/softfetch.git
 cd softfetch
-go build -o bin/softfetch .
+make install
 ```
 
 ## Usage

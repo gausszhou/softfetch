@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gausszhou/softfetch/internal/version"
+	"github.com/gausszhou/softfetch/internal/info"
 )
 
 func TestVersionFlag(t *testing.T) {
@@ -18,7 +18,7 @@ func TestVersionFlag(t *testing.T) {
 		{"versionShort", []string{"-v"}},
 	}
 
-	expectedVersion := version.GetVersion()
+	expectedVersion := info.Version
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
