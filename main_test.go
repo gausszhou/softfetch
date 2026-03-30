@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gausszhou/softfetch/pkg/version"
+	"github.com/gausszhou/softfetch/internal/version"
 )
 
 func TestVersionFlag(t *testing.T) {

@@ -6,7 +6,7 @@ import (
 
 	"github.com/gausszhou/softfetch/internal/detect"
 	"github.com/gausszhou/softfetch/internal/display"
-	"github.com/gausszhou/softfetch/pkg/version"
+	"github.com/gausszhou/softfetch/internal/version"
 )
 
 func main() {
