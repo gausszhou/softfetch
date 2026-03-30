@@ -93,7 +93,7 @@ import (
 
 ## Project Structure
 ```
-cmd/softfetch/    # Main application entry point
+main.go           # Main application entry point
 pkg/version/      # Exported version package
 internal/         # Private application code
 configs/          # Configuration files
