@@ -13,15 +13,14 @@ softfetch/
 ├── internal/
 │   ├── detect/              # 检测模块
 │   │   ├── types.go         # 类型定义和核心接口
-│   │   ├── detectors.go    # 具体检测器实现
+│   │   ├── detectors.go     # 具体检测器实现
 │   │   └── detectors_test.go
 │   ├── display/             # 显示模块
 │   │   └── display.go       # 终端输出格式化
 │   ├── command/             # 命令执行模块
 │   │   └── command.go       # 系统命令封装
-│   └── version/             # 版本信息模块
-│       ├── version.go
-│       └── version_test.go
+│   └── info/                # 版本信息模块
+│       └── info.go
 └── docs/
     └── DESIGN.md            # 本文档
 ```
@@ -70,14 +69,20 @@ type Detector interface {
 
 #### 内置检测器
 
-- GoDetector: 检测 Go
-- NodeDetector: 检测 Node.js
-- PythonDetector: 检测 Python
-- JavaDetector: 检测 Java
-- CDetector: 检测 C (gcc/clang/cc)
-- CppDetector: 检测 C++ (g++/clang++/c++)
-- RustDetector: 检测 Rust
-- PHPDetector: 检测 PHP
+| 检测器 | 命令 | 类别 |
+|--------|------|------|
+| GoDetector | go | Language |
+| NodeDetector | node | Language |
+| PythonDetector | python3/python | Language |
+| JavaDetector | java | Language |
+| CDetector | gcc/clang/cc | Language |
+| CppDetector | g++/clang++/c++ | Language |
+| RustDetector | rustc | Language |
+| PHPDetector | php | Language |
+| DockerDetector | docker | Runtime |
+| GitDetector | git | BuildTool |
+| RubyDetector | ruby | Language |
+| DotNetDetector | dotnet | Runtime |
 
 ### 2. display 模块
 
@@ -108,35 +113,71 @@ type Detector interface {
 - LookPath: 查找命令路径
 - Getenv/GetenvOrDefault: 环境变量操作
 
-### 4. version 模块
+### 4. info 模块
 
 管理应用版本信息。
 
 #### 变量
 
 - Version: 当前版本
-- BuildDate: 构建日期
-- GitCommit: Git 提交哈希
 
-#### 函数
+### 5. 并行检测
 
-- GetVersion: 获取版本字符串
-- GetBuildInfo: 获取完整的构建信息
+Detect 函数使用 `sync.WaitGroup` 和 channel 实现并行检测：
+
+```go
+func Detect(detectors ...Detector) DetectionResult {
+    result := DetectionResult{
+        Detected: time.Now(),
+        OS:       runtime.GOOS,
+        Arch:     runtime.GOARCH,
+    }
+
+    resultChan := make(chan Tool, len(detectors))
+    var wg sync.WaitGroup
+
+    for _, d := range detectors {
+        wg.Add(1)
+        go func(detector Detector) {
+            defer wg.Done()
+            resultChan <- detector.Detect()
+        }(d)
+    }
+
+    go func() {
+        wg.Wait()
+        close(resultChan)
+    }()
+
+    for tool := range resultChan {
+        result.Tools = append(result.Tools, tool)
+    }
+
+    return result
+}
+```
+
+**性能优势：**
+- 串行检测：O(n × timeout)
+- 并行检测：O(timeout)
+- 12 个检测器理论提升 10 倍以上
 
 ## 执行流程
 
 ```
 main()
     │
-    ├─→ detect.GetCoreDetectors()    # 获取所有检测器
+    ├─→ detect.GetCoreDetectors()    # 获取所有检测器（12个）
     │
-    ├─→ detect.Detect(...)           # 执行检测
+    ├─→ detect.Detect(...)           # 并行执行检测
     │       │
-    │       └─→ 遍历检测器，调用 Detect() 方法
-    │           │
-    │           └─→ 执行系统命令获取版本信息
-    │               │
-    │               └─→ parseVersion() 解析版本号
+    │       ├─→ 启动 goroutine 并行调用 Detect()
+    │       │       │
+    │       │       └─→ 执行系统命令获取版本信息
+    │       │           │
+    │       │           └─→ parseVersion() 解析版本号
+    │       │
+    │       └─→ channel 收集结果
     │
     ├─→ display.PrintResult()        # 打印检测结果
     │
