@@ -123,11 +123,7 @@ func parseVersion(output string) string {
 			rest = strings.TrimSpace(rest)
 			rest = strings.Trim(rest, "\"")
 
-			for _, sep := range []string{" ", ":", "v"} {
-				if strings.HasPrefix(rest, sep) {
-					rest = strings.TrimPrefix(rest, sep)
-				}
-			}
+			rest = strings.TrimPrefix(strings.TrimPrefix(strings.TrimPrefix(rest, " "), ":"), "v")
 
 			fields := strings.Fields(rest)
 			if len(fields) > 0 {
