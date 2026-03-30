@@ -6,7 +6,7 @@ import (
 
 	"github.com/gausszhou/softfetch/internal/detect"
 	"github.com/gausszhou/softfetch/internal/display"
-	"github.com/gausszhou/softfetch/internal/version"
+	"github.com/gausszhou/softfetch/internal/info"
 )
 
 func main() {
@@ -17,7 +17,7 @@ func main() {
 
 	if len(os.Args) > 1 {
 		if os.Args[1] == "--version" || os.Args[1] == "-v" {
-			fmt.Printf("SoftFetch %s\n", version.GetVersion())
+			fmt.Printf("SoftFetch %s\n", info.Version)
 		}
 	}
 }

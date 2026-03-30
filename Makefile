@@ -21,11 +21,6 @@ install:
 	go install .
 	@echo "$(BINARY_NAME) installed successfully to $$(go env GOPATH)/bin"
 
-uninstall:
-	@echo "Uninstalling $(BINARY_NAME)..."
-	rm -f $$(go env GOPATH)/bin/$(BINARY_NAME).exe
-	@echo "$(BINARY_NAME) uninstalled successfully"
-
 build-all: build-linux build-darwin build-windows
 
 build-linux:
