@@ -4,7 +4,7 @@ BINARY_NAME=softfetch
 DIST_DIR=dist
 
 build:
-	go build -o $(DIST_DIR)/$(BINARY_NAME) cmd/softfetch/main.go
+	go build -o $(DIST_DIR)/$(BINARY_NAME) .
 
 test:
 	go test ./...
@@ -15,7 +15,7 @@ clean:
 
 install:
 	@echo "Installing $(BINARY_NAME)..."
-	go install ./cmd/softfetch
+	go install .
 	@echo "$(BINARY_NAME) installed successfully to $$(go env GOPATH)/bin"
 
 uninstall:
@@ -27,18 +27,18 @@ build-all: build-linux build-darwin build-windows
 
 build-linux:
 	mkdir -p $(DIST_DIR)
-	GOOS=linux GOARCH=amd64 go build -o $(DIST_DIR)/$(BINARY_NAME)-linux-amd64 cmd/softfetch/main.go
-	GOOS=linux GOARCH=arm64 go build -o $(DIST_DIR)/$(BINARY_NAME)-linux-arm64 cmd/softfetch/main.go
+	GOOS=linux GOARCH=amd64 go build -o $(DIST_DIR)/$(BINARY_NAME)-linux-amd64 .
+	GOOS=linux GOARCH=arm64 go build -o $(DIST_DIR)/$(BINARY_NAME)-linux-arm64 .
 
 build-darwin:
 	mkdir -p $(DIST_DIR)
-	GOOS=darwin GOARCH=amd64 go build -o $(DIST_DIR)/$(BINARY_NAME)-darwin-amd64 cmd/softfetch/main.go
-	GOOS=darwin GOARCH=arm64 go build -o $(DIST_DIR)/$(BINARY_NAME)-darwin-arm64 cmd/softfetch/main.go
+	GOOS=darwin GOARCH=amd64 go build -o $(DIST_DIR)/$(BINARY_NAME)-darwin-amd64 .
+	GOOS=darwin GOARCH=arm64 go build -o $(DIST_DIR)/$(BINARY_NAME)-darwin-arm64 .
 
 build-windows:
 	mkdir -p $(DIST_DIR)
-	GOOS=windows GOARCH=amd64 go build -o $(DIST_DIR)/$(BINARY_NAME)-windows-amd64.exe cmd/softfetch/main.go
-	GOOS=windows GOARCH=arm64 go build -o $(DIST_DIR)/$(BINARY_NAME)-windows-arm64.exe cmd/softfetch/main.go
+	GOOS=windows GOARCH=amd64 go build -o $(DIST_DIR)/$(BINARY_NAME)-windows-amd64.exe .
+	GOOS=windows GOARCH=arm64 go build -o $(DIST_DIR)/$(BINARY_NAME)-windows-arm64.exe .
 
 lint:
 	golangci-lint run ./...

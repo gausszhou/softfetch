@@ -63,11 +63,11 @@ func TestJavaDetector(t *testing.T) {
 func TestGetCoreDetectors(t *testing.T) {
 	detectors := GetCoreDetectors()
 
-	if len(detectors) != 4 {
-		t.Errorf("Expected 4 detectors, got %d", len(detectors))
+	if len(detectors) != 8 {
+		t.Errorf("Expected 8 detectors, got %d", len(detectors))
 	}
 
-	expectedNames := []string{"Go", "Node.js", "Python", "Java"}
+	expectedNames := []string{"Go", "Node.js", "Python", "Java", "C", "C++", "Rust", "PHP"}
 	for i, d := range detectors {
 		if d.Name() != expectedNames[i] {
 			t.Errorf("Expected detector[%d] name '%s', got '%s'", i, expectedNames[i], d.Name())
@@ -87,8 +87,8 @@ func TestDetect(t *testing.T) {
 		t.Error("Expected Arch to be set")
 	}
 
-	if len(result.Tools) != 4 {
-		t.Errorf("Expected 4 tools in result, got %d", len(result.Tools))
+	if len(result.Tools) != 8 {
+		t.Errorf("Expected 8 tools in result, got %d", len(result.Tools))
 	}
 }
 
