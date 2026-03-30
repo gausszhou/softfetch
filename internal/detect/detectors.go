@@ -325,6 +325,166 @@ func (d *PHPDetector) Detect() Tool {
 	return tool
 }
 
+type DockerDetector struct {
+	baseDetector
+}
+
+func NewDockerDetector() *DockerDetector {
+	return &DockerDetector{
+		baseDetector: baseDetector{
+			name:     "Docker",
+			category: CategoryRuntime,
+		},
+	}
+}
+
+func (d *DockerDetector) Detect() Tool {
+	tool := Tool{
+		Name:     d.name,
+		Category: string(d.Category()),
+		Symbol:   "🐳",
+	}
+
+	path, err := command.LookPath("docker")
+	if err != nil {
+		tool.Detected = false
+		tool.Version = "Not installed"
+		return tool
+	}
+
+	result := command.Execute("docker", "--version")
+	if result.Error != nil {
+		tool.Detected = false
+		tool.Version = parseVersion(result.Output)
+		return tool
+	}
+
+	tool.Path = path
+	tool.Detected = true
+	tool.Version = parseVersion(result.Output)
+	return tool
+}
+
+type GitDetector struct {
+	baseDetector
+}
+
+func NewGitDetector() *GitDetector {
+	return &GitDetector{
+		baseDetector: baseDetector{
+			name:     "Git",
+			category: CategoryBuildTool,
+		},
+	}
+}
+
+func (d *GitDetector) Detect() Tool {
+	tool := Tool{
+		Name:     d.name,
+		Category: string(d.Category()),
+		Symbol:   "📂",
+	}
+
+	path, err := command.LookPath("git")
+	if err != nil {
+		tool.Detected = false
+		tool.Version = "Not installed"
+		return tool
+	}
+
+	result := command.Execute("git", "--version")
+	if result.Error != nil {
+		tool.Detected = false
+		tool.Version = parseVersion(result.Output)
+		return tool
+	}
+
+	tool.Path = path
+	tool.Detected = true
+	tool.Version = parseVersion(result.Output)
+	return tool
+}
+
+type RubyDetector struct {
+	baseDetector
+}
+
+func NewRubyDetector() *RubyDetector {
+	return &RubyDetector{
+		baseDetector: baseDetector{
+			name:     "Ruby",
+			category: CategoryLanguage,
+		},
+	}
+}
+
+func (d *RubyDetector) Detect() Tool {
+	tool := Tool{
+		Name:     d.name,
+		Category: string(d.Category()),
+		Symbol:   "💎",
+	}
+
+	path, err := command.LookPath("ruby")
+	if err != nil {
+		tool.Detected = false
+		tool.Version = "Not installed"
+		return tool
+	}
+
+	result := command.Execute("ruby", "--version")
+	if result.Error != nil {
+		tool.Detected = false
+		tool.Version = parseVersion(result.Output)
+		return tool
+	}
+
+	tool.Path = path
+	tool.Detected = true
+	tool.Version = parseVersion(result.Output)
+	return tool
+}
+
+type DotNetDetector struct {
+	baseDetector
+}
+
+func NewDotNetDetector() *DotNetDetector {
+	return &DotNetDetector{
+		baseDetector: baseDetector{
+			name:     ".NET",
+			category: CategoryRuntime,
+		},
+	}
+}
+
+func (d *DotNetDetector) Detect() Tool {
+	tool := Tool{
+		Name:     d.name,
+		Category: string(d.Category()),
+		Symbol:   "🔷",
+	}
+
+	path, err := command.LookPath("dotnet")
+	if err != nil {
+		tool.Detected = false
+		tool.Version = "Not installed"
+		return tool
+	}
+
+	result := command.Execute("dotnet", "--version")
+	if result.Error != nil {
+		tool.Detected = false
+		tool.Version = parseVersion(result.Output)
+		return tool
+	}
+
+	tool.Path = path
+	tool.Detected = true
+	tool.Version = parseVersion(result.Output)
+	return tool
+}
+
 func GetCoreDetectors() []Detector {
 	return []Detector{
 		NewGoDetector(),
@@ -335,5 +495,9 @@ func GetCoreDetectors() []Detector {
 		NewCppDetector(),
 		NewRustDetector(),
 		NewPHPDetector(),
+		NewDockerDetector(),
+		NewGitDetector(),
+		NewRubyDetector(),
+		NewDotNetDetector(),
 	}
 }

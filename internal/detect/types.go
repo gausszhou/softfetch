@@ -5,6 +5,7 @@ import (
 	"regexp"
 	"runtime"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -63,8 +64,27 @@ func Detect(detectors ...Detector) DetectionResult {
 		Arch:     runtime.GOARCH,
 	}
 
+	if len(detectors) == 0 {
+		return result
+	}
+
+	resultChan := make(chan Tool, len(detectors))
+	var wg sync.WaitGroup
+
 	for _, d := range detectors {
-		tool := d.Detect()
+		wg.Add(1)
+		go func(detector Detector) {
+			defer wg.Done()
+			resultChan <- detector.Detect()
+		}(d)
+	}
+
+	go func() {
+		wg.Wait()
+		close(resultChan)
+	}()
+
+	for tool := range resultChan {
 		result.Tools = append(result.Tools, tool)
 	}
 
