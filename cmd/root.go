@@ -12,8 +12,8 @@ var rootCmd = &cobra.Command{
 	Short: "A command-line tool that detects installed development tools and languages",
 	Long:  `SoftFetch is a simple and fast CLI tool to detect installed development tools, languages, and system information.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		versionFlag, _ := cmd.Flags().GetBool("version")
-		if versionFlag {
+		versionFlag, err := cmd.Flags().GetBool("version")
+		if err == nil && versionFlag {
 			display.PrintVersion(info.Version)
 			return
 		}
