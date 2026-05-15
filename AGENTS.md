@@ -109,6 +109,20 @@ test/             # Integration and end-to-end tests
 - Run `make fmt` and `make test` before committing
 - Feature branches for new development
 
+## Release Procedure
+1. Switch to `main` branch and sync remote code:
+   ```bash
+   git checkout main && git pull origin main
+   ```
+2. Push a `v`-prefixed tag to remote:
+   ```bash
+   git tag -a v<X.Y.Z> -m "Release v<X.Y.Z>" && git push origin v<X.Y.Z>
+   ```
+3. Switch back to `develop` branch:
+   ```bash
+   git checkout develop
+   ```
+
 ## Dependencies
 - Use `go mod tidy` to clean dependencies
 - Minimize external dependencies
