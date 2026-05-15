@@ -4,7 +4,7 @@ BINARY_NAME=softfetch
 DIST_DIR=dist
 VERSION=0.1.0
 
-LDFLAGS=-X github.com/gausszhou/softfetch/pkg/version.Version=$(VERSION)
+LDFLAGS=-X github.com/gausszhou/softfetch/pkg/version.Version=$(VERSION) -extldflags "-static"
 
 build:
 	go build -ldflags "$(LDFLAGS)" -o $(DIST_DIR)/$(BINARY_NAME) .
