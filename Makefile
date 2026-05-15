@@ -4,7 +4,8 @@ BINARY_NAME=softfetch
 DIST_DIR=dist
 VERSION=0.1.0
 
-LDFLAGS=-s -w -X github.com/gausszhou/softfetch/pkg/version.Version=$(VERSION)
+LDFLAGS=-s -w \
+-X github.com/gausszhou/softfetch/pkg/version.Version=$(VERSION)
 
 build:
 	CGO_ENABLED=0 go build -ldflags "$(LDFLAGS)" -o $(DIST_DIR)/$(BINARY_NAME) .
