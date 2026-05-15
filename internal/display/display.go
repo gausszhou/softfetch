@@ -82,6 +82,10 @@ func printTool(tool detect.Tool, nameWidth, verWidth int) {
 	)
 }
 
+func PrintVersion(version string) {
+	fmt.Printf("SoftFetch %s\n", version)
+}
+
 func PrintSimple(result detect.DetectionResult) {
 	for _, tool := range result.Tools {
 		if tool.Detected {
