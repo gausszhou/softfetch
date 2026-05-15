@@ -4,20 +4,12 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/gausszhou/softfetch/internal/detect"
-	"github.com/gausszhou/softfetch/internal/display"
-	"github.com/gausszhou/softfetch/internal/info"
+	"github.com/gausszhou/softfetch/cmd"
 )
 
 func main() {
-	detectors := detect.GetCoreDetectors()
-	result := detect.Detect(detectors...)
-
-	display.PrintResult(result)
-
-	if len(os.Args) > 1 {
-		if os.Args[1] == "--version" || os.Args[1] == "-v" {
-			fmt.Printf("SoftFetch %s\n", info.Version)
-		}
+	if err := cmd.Execute(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
 	}
 }
